@@ -5,13 +5,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExcelReader {
 
-    public static void read() {
+    public static List<List<String>> read(
+            String filePath,
+            String sheetName) throws IOException {
 
-        String filePath = "C:/temp/employees.xlsx";
-        String sheetName = "Employees";
+        List<List<String>> result = new ArrayList<>();
 
         DataFormatter formatter = new DataFormatter();
 
@@ -25,22 +28,33 @@ public class ExcelReader {
                         "Sheet not found: " + sheetName);
             }
 
-            for (Row row : sheet) {
+            for (int i = sheet.getFirstRowNum();
+                 i <= sheet.getLastRowNum(); i++) {
 
-                for (Cell cell : row) {
+                Row row = sheet.getRow(i);
 
-                    String value =
-                            formatter.formatCellValue(cell);
+                List<String> rowData = new ArrayList<>();
 
-                    System.out.print(value + "\t");
+                if (row != null) {
+                    for (int j = 0; j < row.getLastCellNum(); j++) {
+
+                        Cell cell = row.getCell(
+                                j,
+                                Row.MissingCellPolicy.RETURN_BLANK_AS_NULL
+                        );
+
+                        String value = cell == null
+                                ? ""
+                                : formatter.formatCellValue(cell);
+
+                        rowData.add(value);
+                    }
                 }
 
-                System.out.println();
+                result.add(rowData);
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+        return result;
     }
 }
-
