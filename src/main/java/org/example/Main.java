@@ -6,6 +6,8 @@ import org.example.model.baza.TechnicalReport;
 import org.example.model.baza.TechnicalReportMapper;
 import org.example.model.prib.MeasuringInstrument;
 import org.example.model.prib.MeasuringInstrumentMapper;
+import org.example.model.priz.GroundingMeasurement;
+import org.example.model.priz.GroundingMeasurementMapper;
 import org.example.wordGenerator.WordGenerator;
 
 import java.util.List;
@@ -28,6 +30,9 @@ public class Main {
         TechnicalReport technicalReport= TechnicalReportMapper.map(baza);
         List<MeasuringInstrument> instruments =
                 MeasuringInstrumentMapper.map(prib);
+
+        List<GroundingMeasurement> measurements =
+                GroundingMeasurementMapper.map(priz);
 
         WordGenerator.createWordWithLineText(
                 "C:/temp/documents",
