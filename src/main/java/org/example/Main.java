@@ -2,6 +2,10 @@ package org.example;
 
 import org.example.excelReader.ExcelReader;
 import org.example.excelReader.ProtocolContinuityGenerator;
+import org.example.model.baza.TechnicalReport;
+import org.example.model.baza.TechnicalReportMapper;
+import org.example.model.prib.MeasuringInstrument;
+import org.example.model.prib.MeasuringInstrumentMapper;
 import org.example.wordGenerator.WordGenerator;
 
 import java.util.List;
@@ -21,8 +25,9 @@ public class Main {
         List<List<String>> solul = ExcelReader.read("C:/temp/SRL Bruder Unterweger Mol.xlsx", "SOLUL");
         List<List<String>> prib = ExcelReader.read("C:/temp/SRL Bruder Unterweger Mol.xlsx", "PRIB");
 
-
-
+        TechnicalReport technicalReport= TechnicalReportMapper.map(baza);
+        List<MeasuringInstrument> instruments =
+                MeasuringInstrumentMapper.map(prib);
 
         WordGenerator.createWordWithLineText(
                 "C:/temp/documents",
