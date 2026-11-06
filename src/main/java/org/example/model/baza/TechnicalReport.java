@@ -2,8 +2,10 @@ package org.example.model.baza;
 
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TechnicalReport {
 
@@ -36,7 +38,7 @@ public class TechnicalReport {
     private String laboratoryName;
     private String laboratoryAddress;
     private String laboratoryNumber;
-    private LocalDate laboratoryValidUntil;
+    private String laboratoryValidUntil;
     private String director;
     private String laboratoryManager;
     private List<String> teamMembers = new ArrayList<>();
@@ -222,12 +224,13 @@ public class TechnicalReport {
         this.laboratoryNumber = laboratoryNumber;
     }
 
-    public LocalDate getLaboratoryValidUntil() {
+    public String getLaboratoryValidUntil() {
         return laboratoryValidUntil;
     }
 
     public void setLaboratoryValidUntil(LocalDate laboratoryValidUntil) {
-        this.laboratoryValidUntil = laboratoryValidUntil;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("ro", "RO"));
+        this.laboratoryValidUntil = LocalDate.parse(laboratoryValidUntil.toString()).format(formatter);
     }
 
     public String getDirector() {

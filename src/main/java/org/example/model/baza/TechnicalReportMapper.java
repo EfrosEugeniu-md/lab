@@ -90,7 +90,7 @@ public class TechnicalReportMapper {
                 data.get("denumirea laboratorului"));
 
         report.setLaboratoryAddress(
-                data.get("adresa, telefon"));
+                data.get("adresa  telefon"));
 
         report.setLaboratoryNumber(
                 data.get("laboratorul electrotehnic nr."));

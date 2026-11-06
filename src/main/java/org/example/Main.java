@@ -9,6 +9,7 @@ import org.example.model.prib.MeasuringInstrumentMapper;
 import org.example.model.priz.GroundingMeasurement;
 import org.example.model.priz.GroundingMeasurementMapper;
 import org.example.wordGenerator.WordGenerator;
+import org.example.wordPress.TechnicalReportGeneratorMy;
 
 import java.util.List;
 
@@ -34,22 +35,9 @@ public class Main {
         List<GroundingMeasurement> measurements =
                 GroundingMeasurementMapper.map(priz);
 
-        WordGenerator.createWordWithLineText(
-                "C:/temp/documents",
-                "Protocol",
-                "Лаборатория электрических измерений ELCOM-LUX"
-        );
 
-        extracted();
-
-
-        extracted1();
-
-
-        var data = createData();
-
-        ProtocolContinuityGenerator.generate(
-    data,
+        TechnicalReportGeneratorMy.generate(
+                technicalReport,
             "C:/ELCOM-LUX/Protocols",
             "Protocol_02_2"
             );}
