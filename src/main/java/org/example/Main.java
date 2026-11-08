@@ -4,6 +4,8 @@ import org.example.excelReader.ExcelReader;
 import org.example.excelReader.ProtocolContinuityGenerator;
 import org.example.model.baza.TechnicalReport;
 import org.example.model.baza.TechnicalReportMapper;
+import org.example.model.circ.ElectricalNode;
+import org.example.model.circ.ElectricalTreeBuilder;
 import org.example.model.prib.MeasuringInstrument;
 import org.example.model.prib.MeasuringInstrumentMapper;
 import org.example.model.priz.GroundingMeasurement;
@@ -35,6 +37,8 @@ public class Main {
         List<GroundingMeasurement> measurements =
                 GroundingMeasurementMapper.map(priz);
 
+        ElectricalNode root =
+                ElectricalTreeBuilder.build(shem);
 
         TechnicalReportGeneratorMy.generate(
                 technicalReport,
