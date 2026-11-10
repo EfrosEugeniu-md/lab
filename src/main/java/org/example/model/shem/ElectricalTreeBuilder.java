@@ -36,9 +36,10 @@ public class ElectricalTreeBuilder {
 
         for (List<String> row : rows) {
             String parent = get(row, PARENT);
-
-            if (parent != null && !parent.startsWith("ID ")) {
+            String name = get(row, NAME);
+            if (parent != null ) {
                 parentNames.add(parent);
+                parentNames.add(name);
             }
         }
 
@@ -176,5 +177,63 @@ public class ElectricalTreeBuilder {
         return Double.valueOf(
                 value.replace(",", ".")
         );
+    }
+    public static ElectricalNode findPanel(
+            ElectricalNode root,
+            String panelName) {
+
+        if (root == null) {
+            return null;
+        }
+
+        if (root.getType() == NodeType.PANEL
+                && root.getName().equalsIgnoreCase(panelName)) {
+
+            return root;
+        }
+
+        for (ElectricalNode child : root.getChildren()) {
+
+            ElectricalNode result = findPanel(child, panelName);
+
+            if (result != null) {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    public static void printPanel(ElectricalNode panel, int level) {
+
+        if (panel == null) {
+            System.out.println("Электрощит не найден");
+            return;
+        }
+
+        String indent = "  ".repeat(level);
+
+        System.out.println(indent + "ЭЛЕКТРОЩИТ: " + panel.getName());
+
+        for (ElectricalNode child : panel.getChildren()) {
+
+            printNode(child, level + 1);
+        }
+    }
+
+    private static void printNode(ElectricalNode node, int level) {
+
+        String indent = "  ".repeat(level);
+
+        System.out.println(
+                indent + node.getName()
+                        + " | Количество: " + node.getQuantity()
+                        + " | Сечение: " + node.getSection()
+                        + " | Длина: " + node.getLength()
+        );
+
+        for (ElectricalNode child : node.getChildren()) {
+            printNode(child, level + 1);
+        }
     }
 }

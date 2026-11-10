@@ -46,7 +46,13 @@ public class Main {
             "C:/ELCOM-LUX/Protocols",
             "Protocol_02_2"
             );
-        printTree(root,1);
+        ElectricalNode panel = ElectricalTreeBuilder.findPanel(
+                root,
+                "Gradirnea"
+        );
+
+        ElectricalTreeBuilder.printPanel(panel, 0);
+        //    printTree(root,1);
        // printHierarchy(contours);
     }
     public static void printHierarchy(List<Contour> contours) {
