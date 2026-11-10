@@ -1,4 +1,4 @@
-package org.example.model.circ;
+package org.example.model.shem;
 
 public record ExcelRow(
         String parent,

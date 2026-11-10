@@ -1,21 +1,17 @@
 package org.example;
 
 import org.example.excelReader.ExcelReader;
-import org.example.excelReader.ProtocolContinuityGenerator;
 import org.example.model.baza.TechnicalReport;
 import org.example.model.baza.TechnicalReportMapper;
-import org.example.model.circ.ElectricalNode;
-import org.example.model.circ.ElectricalTreeBuilder;
+import org.example.model.shem.ElectricalNode;
+import org.example.model.shem.ElectricalTreeBuilder;
 import org.example.model.prib.MeasuringInstrument;
 import org.example.model.prib.MeasuringInstrumentMapper;
 import org.example.model.priz.GroundingMeasurement;
 import org.example.model.priz.GroundingMeasurementMapper;
-import org.example.wordGenerator.WordGenerator;
 import org.example.wordPress.TechnicalReportGeneratorMy;
 
 import java.util.List;
-
-import static org.example.wordGenerator.xxx.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
