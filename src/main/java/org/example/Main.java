@@ -3,6 +3,10 @@ package org.example;
 import org.example.excelReader.ExcelReader;
 import org.example.model.baza.TechnicalReport;
 import org.example.model.baza.TechnicalReportMapper;
+import org.example.model.circ.Contour;
+import org.example.model.circ.MeasurementElement;
+import org.example.model.circ.MeasurementTreeBuilder;
+import org.example.model.circ.Room;
 import org.example.model.shem.ElectricalNode;
 import org.example.model.shem.ElectricalTreeBuilder;
 import org.example.model.prib.MeasuringInstrument;
@@ -35,12 +39,56 @@ public class Main {
 
         ElectricalNode root =
                 ElectricalTreeBuilder.build(shem);
+        List<Contour> contours = MeasurementTreeBuilder.build(circ);
 
         TechnicalReportGeneratorMy.generate(
                 technicalReport,
             "C:/ELCOM-LUX/Protocols",
             "Protocol_02_2"
-            );}
+            );
 
+        printContours(contours);
+    }
 
+    public static void printContours(List<Contour> contours) {
+
+        for (Contour contour : contours) {
+
+            System.out.println("CONTOUR: " + contour.getName());
+
+            for (Room room : contour.getRooms()) {
+
+                System.out.println("  ROOM: " + room.getName());
+
+                for (MeasurementElement element : room.getElements()) {
+                    printElement(element, 2);
+                }
+            }
+
+            for (MeasurementElement element : contour.getElements()) {
+                printElement(element, 1);
+            }
+        }
+    }
+
+    private static void printElement(
+            MeasurementElement element,
+            int indent
+    ) {
+
+        String prefix = "  ".repeat(indent);
+
+        System.out.printf(
+                "%s%s | Panel: %s | Measurements: %d | Negative: %d%n",
+                prefix,
+                element.getName(),
+                element.getElectricalPanel(),
+                element.getMeasurementCount(),
+                element.getNegativeCount()
+        );
+
+        for (MeasurementElement child : element.getChildren()) {
+            printElement(child, indent + 1);
+        }
+    }
 }
