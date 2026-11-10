@@ -46,19 +46,18 @@ public class Main {
             "C:/ELCOM-LUX/Protocols",
             "Protocol_02_2"
             );
-
-        printContours(contours);
+        printTree(root,1);
+       // printHierarchy(contours);
     }
-
-    public static void printContours(List<Contour> contours) {
+    public static void printHierarchy(List<Contour> contours) {
 
         for (Contour contour : contours) {
 
-            System.out.println("CONTOUR: " + contour.getName());
+            System.out.println("\nКОНТУР: " + contour.getName());
 
             for (Room room : contour.getRooms()) {
 
-                System.out.println("  ROOM: " + room.getName());
+                System.out.println("  ПОМЕЩЕНИЕ: " + room.getName());
 
                 for (MeasurementElement element : room.getElements()) {
                     printElement(element, 2);
@@ -71,24 +70,57 @@ public class Main {
         }
     }
 
-    private static void printElement(
-            MeasurementElement element,
-            int indent
-    ) {
+    private static void printElement(MeasurementElement element, int indent) {
 
         String prefix = "  ".repeat(indent);
 
         System.out.printf(
-                "%s%s | Panel: %s | Measurements: %d | Negative: %d%n",
+                "%sЭлемент: %s | Измерений: %d | Отрицательных: %d%n",
                 prefix,
                 element.getName(),
-                element.getElectricalPanel(),
                 element.getMeasurementCount(),
                 element.getNegativeCount()
         );
 
+        // Если есть ссылка на электрощит — вызываем отдельный метод
+        if (element.getElectricalPanel() != null
+                && !element.getElectricalPanel().isBlank()) {
+
+            printElectricalPanel(element.getElectricalPanel(), element);
+        }
+
         for (MeasurementElement child : element.getChildren()) {
             printElement(child, indent + 1);
+        }
+    }
+
+    private static void printElectricalPanel(
+            String panelName,
+            MeasurementElement element) {
+
+        System.out.println("  ".repeat(element.getLevel() + 2)
+                + "ЭЛЕКТРОЩИТ: " + panelName);
+
+        System.out.println("  ".repeat(element.getLevel() + 3)
+                + "Название: " + element.getName()
+                + " | Измерений: " + element.getMeasurementCount());
+    }
+
+    public static void printTree(ElectricalNode node, int level) {
+
+        String indent = "  ".repeat(level);
+
+        System.out.println(indent + node.getName());
+
+        for (ElectricalNode child : node.getChildren()) {
+            printTree(child, level + 1);
+        }
+    }
+
+    public static void printTree(List<ElectricalNode> nodes) {
+
+        for (ElectricalNode node : nodes) {
+            printTree(node, 0);
         }
     }
 }
