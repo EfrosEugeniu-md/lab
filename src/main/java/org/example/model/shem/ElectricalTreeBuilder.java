@@ -17,33 +17,61 @@ public class ElectricalTreeBuilder {
     private static final int OPERATION_CURRENT = 10;
     private static final int IMPEDANCE = 11;
 
+
     public static ElectricalNode build(List<List<String>> rows) {
 
-        // 1. Создаём корневой элемент
+        // 1. Создаём ROOT
         ElectricalNode root = new ElectricalNode();
         root.setType(NodeType.ROOT);
         root.setName("ROOT");
 
-        // 2. Хранилище созданных элементов
+        // 2. Хранилища
         Map<String, ElectricalNode> nodes = new HashMap<>();
+
+        // Связь строки Excel с созданным элементом
+        Map<List<String>, ElectricalNode> rowNodes = new IdentityHashMap<>();
+
         nodes.put("ROOT", root);
 
-        ElectricalNode currentParent = root;
-        ElectricalNode previousElement = null;
-
-        // 3. Определяем все имена родительских элементов
+        // 3. Определяем имена родительских элементов
         Set<String> parentNames = new HashSet<>();
 
         for (List<String> row : rows) {
+
             String parent = get(row, PARENT);
             String name = get(row, NAME);
-            if (parent != null ) {
+
+            if (parent != null) {
                 parentNames.add(parent);
                 parentNames.add(name);
             }
         }
 
-        // 4. Обрабатываем строки Excel
+        // 4. Первый проход: создаём ВСЕ обычные элементы
+        for (List<String> row : rows) {
+
+            String name = get(row, NAME);
+
+            if (name == null || name.startsWith("-")) {
+                continue;
+            }
+
+            ElectricalNode node = createNode(row);
+
+            if (parentNames.contains(name)) {
+                node.setType(NodeType.PANEL);
+            } else {
+                node.setType(NodeType.ELEMENT);
+            }
+
+            nodes.put(name, node);
+            rowNodes.put(row, node);
+        }
+
+        // 5. Второй проход: устанавливаем связи
+        ElectricalNode currentParent = root;
+        ElectricalNode previousElement = null;
+
         for (List<String> row : rows) {
 
             String parentName = get(row, PARENT);
@@ -72,7 +100,7 @@ public class ElectricalTreeBuilder {
                 previousElement = null;
             }
 
-            // Вложенные элементы
+            // Вложенные элементы (DETAIL)
             if (name.startsWith("-")) {
 
                 if (previousElement == null) {
@@ -89,25 +117,18 @@ public class ElectricalTreeBuilder {
                 continue;
             }
 
-            // Создаём элемент
-            ElectricalNode node = createNode(row);
+            // Получаем ранее созданный элемент
+            ElectricalNode node = rowNodes.get(row);
 
-            if (parentNames.contains(name)) {
-                node.setType(NodeType.PANEL);
-            } else {
-                node.setType(NodeType.ELEMENT);
-            }
-
+            // Присоединяем к родителю
             currentParent.addChild(node);
-
-            // Регистрируем элемент
-            nodes.put(name, node);
 
             previousElement = node;
         }
 
         return root;
     }
+
 
     // Создание ElectricalNode из строки Excel
     private static ElectricalNode createNode(List<String> row) {
@@ -178,6 +199,7 @@ public class ElectricalTreeBuilder {
                 value.replace(",", ".")
         );
     }
+
     public static ElectricalNode findPanel(
             ElectricalNode root,
             String panelName) {
@@ -186,7 +208,12 @@ public class ElectricalTreeBuilder {
             return null;
         }
 
+        if (root.getName().equals("Gradirnea")) {
+          int a =0;
+        }
+
         if (root.getType() == NodeType.PANEL
+                && root.getName() != null
                 && root.getName().equalsIgnoreCase(panelName)) {
 
             return root;
@@ -203,6 +230,7 @@ public class ElectricalTreeBuilder {
 
         return null;
     }
+
 
     public static void printPanel(ElectricalNode panel, int level) {
 
