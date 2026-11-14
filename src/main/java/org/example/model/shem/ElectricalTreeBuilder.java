@@ -2,22 +2,7 @@ package org.example.model.shem;
 
 import java.util.*;
 
-public class ElectricalTreeBuilder {
-
-    private static final int PARENT = 0;
-    private static final int NAME = 1;
-    private static final int ALIAS = 2;
-    private static final int CABLE_TYPE = 3;
-    private static final int QUANTITY = 4;
-    private static final int SECTION = 5;
-    private static final int RESIST = 6;
-    private static final int PROTECTION = 7;
-    private static final int CALCULATION = 8;
-    private static final int CURRENT = 9;
-    private static final int OPERATION_CURRENT = 10;
-    private static final int IMPEDANCE = 11;
-    private static final int LENGTH = 12;
-
+public class ElectricalTreeBuilder implements ElectricalTreeBuilderString {
 
     public static ElectricalNode build(List<List<String>> rows) {
 
@@ -73,6 +58,7 @@ public class ElectricalTreeBuilder {
 
             // Присоединяем к родителю
             currentParent.addChild(node);
+            node.setParentName(currentParent.getName());
 
             if (node.getType() == NodeType.PANEL){
                 previousElement = node;
@@ -236,10 +222,6 @@ public class ElectricalTreeBuilder {
             return null;
         }
 
-        if (root.getName().equals("Gradirnea")) {
-          int a =0;
-        }
-
         if (root.getType() == NodeType.PANEL
                 && root.getName() != null
                 && root.getName().equalsIgnoreCase(panelName)) {
@@ -259,37 +241,72 @@ public class ElectricalTreeBuilder {
         return null;
     }
 
+    public static List<ElectricalNode> getPanels(ElectricalNode root) {
 
-    public static void printPanel(ElectricalNode panel, int level) {
+        List<ElectricalNode> panels = new ArrayList<>();
 
-        if (panel == null) {
-            System.out.println("Электрощит не найден");
-            return;
+        if (root == null) {
+            return panels;
         }
 
-        String indent = "  ".repeat(level);
+        for (ElectricalNode child : root.getChildren()) {
 
-        System.out.println(indent + "ЭЛЕКТРОЩИТ: " + panel.getName());
+            if (child.getType() == NodeType.PANEL) {
+                panels.add(child);
+            }
 
-        for (ElectricalNode child : panel.getChildren()) {
+            panels.addAll(getPanels(child));
+        }
 
-            printNode(child, level + 1);
+        return panels;
+    }
+
+    public static List<ElectricalNode> getElementsWithDetailsByPanel(
+            ElectricalNode root,
+            String panelName) {
+
+        List<ElectricalNode> result = new ArrayList<>();
+
+        ElectricalNode panel = findPanel(root, panelName);
+
+        if (panel == null) {
+            return result;
+        }
+
+        collectElementsWithDetails(panel, result);
+
+        return result;
+    }
+
+    private static void collectElementsWithDetails(
+            ElectricalNode node,
+            List<ElectricalNode> result) {
+
+        for (ElectricalNode child : node.getChildren()) {
+
+            if (child.getType() == NodeType.ELEMENT
+                    && hasDetails(child)) {
+
+                result.add(child);
+            }
+
+            collectElementsWithDetails(child, result);
         }
     }
 
-    private static void printNode(ElectricalNode node, int level) {
+    private static boolean hasDetails(ElectricalNode node) {
 
-        String indent = "  ".repeat(level);
+        for (ElectricalNode child : node.getChildren()) {
 
-        System.out.println(
-                indent + node.getName()
-                        + " | Количество: " + node.getKabeliKolJilV()
-                        + " | Сечение: " + node.getKabeliSecenie()
-                        + " | Длина: " + node.getKabeliDlina()
-        );
+            if (child.getType() == NodeType.DETAIL) {
+                return true;
+            }
 
-//        for (ElectricalNode child : node.getChildren()) {
-//            printNode(child, level + 1);
-//        }
+            if (hasDetails(child)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
