@@ -12,7 +12,7 @@ public class BuilderZ5 {
 
     public static List<ModelZ5> build(ElectricalNode root) {
         List<ModelZ5> result = new ArrayList<>();
-        int id = 0;
+        int id = 1;
         String curentPaneli;
 
         List<ElectricalNode> panelling = getPanels(root);
@@ -29,13 +29,8 @@ public class BuilderZ5 {
                 if (node.getChildren().isEmpty()) continue;
                 if (!node.getParentName().equals(curentPaneli)) continue;
 
-                ModelZ5 pan = new ModelZ5();
-                pan.setEquipmentName(node.getParentName());
-                result.add(pan);
-
-
                 ModelZ5 avt = new ModelZ5();
-                avt.setEquipmentName(node.getName());
+                avt.setEquipmentName(node.getParentName() + " : " + node.getName());
                 result.add(avt);
 
                 for (ElectricalNode elm : node.getChildren()) {
@@ -43,6 +38,9 @@ public class BuilderZ5 {
                     e.setId(id++);
                     e.setEquipmentName(elm.getName());
                     e.setVerifiedElements(Integer.valueOf(elm.getAliasOrNumberOfPoints()));
+                    e.setContactType("bulon");
+                    e.setResistance(0.1);
+                    e.setNormativeResistance(0.1);
                     result.add(e);
                 }
 
