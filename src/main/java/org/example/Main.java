@@ -11,12 +11,11 @@ import org.example.model.prib.MeasuringInstrument;
 import org.example.model.prib.MeasuringInstrumentMapper;
 import org.example.model.priz.GroundingMeasurement;
 import org.example.model.priz.GroundingMeasurementMapper;
+import org.example.proces_verbal.z5.BuilderZ5;
+import org.example.proces_verbal.z5.ModelZ5;
 import org.example.wordPress.TechnicalReportGeneratorMy;
 
 import java.util.List;
-
-import static org.example.model.shem.ElectricalTreeBuilder.getElementsWithDetailsByPanel;
-import static org.example.model.shem.ElectricalTreeBuilder.getPanels;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -31,23 +30,23 @@ public class Main {
         List<List<String>> solul = ExcelReader.read("C:/temp/SRL Bruder Unterweger Mol.xlsx", "SOLUL");
         List<List<String>> prib = ExcelReader.read("C:/temp/SRL Bruder Unterweger Mol.xlsx", "PRIB");
 
-        TechnicalReport technicalReport = TechnicalReportMapper.map(baza);
+        TechnicalReport osnovnieDanie = TechnicalReportMapper.map(baza);
+
         List<MeasuringInstrument> instruments =
                 MeasuringInstrumentMapper.map(prib);
 
         List<GroundingMeasurement> measurements =
                 GroundingMeasurementMapper.map(priz);
+        List<Contour> contours = MeasurementTreeBuilder.build(circ);
 
         ElectricalNode root =
                 ElectricalTreeBuilder.build(shem);
-        List<Contour> contours = MeasurementTreeBuilder.build(circ);
 
-        List<ElectricalNode> panelsaneli = getPanels(root);
+        List<ModelZ5> z5 = BuilderZ5.build(root);
 
-        List<ElectricalNode> d = getElementsWithDetailsByPanel(root, panelsaneli.get(0).getName());
 
         TechnicalReportGeneratorMy.generate(
-                technicalReport,
+                osnovnieDanie,
                 "C:/ELCOM-LUX/Protocols",
                 "Protocol_02_2"
         );
