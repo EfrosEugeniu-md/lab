@@ -7,21 +7,22 @@ public class ElectricalNode {
 
     private NodeType type;
 
-    private String parent;
+    private String parentName;
     private String name;
-    private String alias;
+    private String aliasOrNumberOfPoints;
 
-    private String cableType;
-    private Integer quantity;
-    private Double section;
-    private Double resist;
+    private String kabeliMarka;
+    private Integer kabeliKolJilV;
+    private Double kabeliSecenie;
+    private Integer kabeliDlina;
+    private Integer kabeliSoprotivlenie;
 
-    private String protectionType;
-    private String calculation;
-    private Double current;
-    private String operationCurrent;
-    private String impedance;
-    private Double length;
+    private String avtomatMarka;
+    private String avtomatTipulDeclansatorului;
+    private Double avtomatNominaliniiTok;
+    private String avtomatTokSrabativaniaOrABCD;
+    private Double avtomatSoprativleniaFazaNolOrIkz;
+
 
     private List<ElectricalNode> children = new ArrayList<>();
 
@@ -30,6 +31,13 @@ public class ElectricalNode {
     }
 
     // Getters and setters
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
 
     public String getName() {
         return name;
@@ -39,92 +47,92 @@ public class ElectricalNode {
         this.name = name;
     }
 
-    public String getAlias() {
-        return alias;
+    public String getAliasOrNumberOfPoints() {
+        return aliasOrNumberOfPoints;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
+    public void setAliasOrNumberOfPoints(String aliasOrNumberOfPoints) {
+        this.aliasOrNumberOfPoints = aliasOrNumberOfPoints;
     }
 
-    public String getCableType() {
-        return cableType;
+    public String getKabeliMarka() {
+        return kabeliMarka;
     }
 
-    public void setCableType(String cableType) {
-        this.cableType = cableType;
+    public void setKabeliMarka(String kabeliMarka) {
+        this.kabeliMarka = kabeliMarka;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getKabeliKolJilV() {
+        return kabeliKolJilV;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setKabeliKolJilV(Integer kabeliKolJilV) {
+        this.kabeliKolJilV = kabeliKolJilV;
     }
 
-    public Double getSection() {
-        return section;
+    public Double getKabeliSecenie() {
+        return kabeliSecenie;
     }
 
-    public void setSection(Double section) {
-        this.section = section;
+    public void setKabeliSecenie(Double kabeliSecenie) {
+        this.kabeliSecenie = kabeliSecenie;
     }
 
-    public Double getResist() {
-        return resist;
+    public Integer getKabeliSoprotivlenie() {
+        return kabeliSoprotivlenie;
     }
 
-    public void setResist(Double resist) {
-        this.resist = resist;
+    public void setKabeliSoprotivlenie(Integer kabeliSoprotivlenie) {
+        this.kabeliSoprotivlenie = kabeliSoprotivlenie;
     }
 
-    public String getProtectionType() {
-        return protectionType;
+    public String getAvtomatMarka() {
+        return avtomatMarka;
     }
 
-    public void setProtectionType(String protectionType) {
-        this.protectionType = protectionType;
+    public void setAvtomatMarka(String avtomatMarka) {
+        this.avtomatMarka = avtomatMarka;
     }
 
-    public String getCalculation() {
-        return calculation;
+    public String getAvtomatTipulDeclansatorului() {
+        return avtomatTipulDeclansatorului;
     }
 
-    public void setCalculation(String calculation) {
-        this.calculation = calculation;
+    public void setAvtomatTipulDeclansatorului(String avtomatTipulDeclansatorului) {
+        this.avtomatTipulDeclansatorului = avtomatTipulDeclansatorului;
     }
 
-    public Double getCurrent() {
-        return current;
+    public Double getAvtomatNominaliniiTok() {
+        return avtomatNominaliniiTok;
     }
 
-    public void setCurrent(Double current) {
-        this.current = current;
+    public void setAvtomatNominaliniiTok(Double avtomatNominaliniiTok) {
+        this.avtomatNominaliniiTok = avtomatNominaliniiTok;
     }
 
-    public String getOperationCurrent() {
-        return operationCurrent;
+    public String getAvtomatTokSrabativaniaOrABCD() {
+        return avtomatTokSrabativaniaOrABCD;
     }
 
-    public void setOperationCurrent(String operationCurrent) {
-        this.operationCurrent = operationCurrent;
+    public void setAvtomatTokSrabativaniaOrABCD(String avtomatTokSrabativaniaOrABCD) {
+        this.avtomatTokSrabativaniaOrABCD = avtomatTokSrabativaniaOrABCD;
     }
 
-    public String getImpedance() {
-        return impedance;
+    public Double getAvtomatSoprativleniaFazaNolOrIkz() {
+        return avtomatSoprativleniaFazaNolOrIkz;
     }
 
-    public void setImpedance(String impedance) {
-        this.impedance = impedance;
+    public void setAvtomatSoprativleniaFazaNolOrIkz(Double avtomatSoprativleniaFazaNolOrIkz) {
+        this.avtomatSoprativleniaFazaNolOrIkz = avtomatSoprativleniaFazaNolOrIkz;
     }
 
-    public Double getLength() {
-        return length;
+    public Integer getKabeliDlina() {
+        return kabeliDlina;
     }
 
-    public void setLength(Double length) {
-        this.length = length;
+    public void setKabeliDlina(Integer kabeliDlina) {
+        this.kabeliDlina = kabeliDlina;
     }
 
     public List<ElectricalNode> getChildren() {

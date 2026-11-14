@@ -162,19 +162,20 @@ public class ElectricalTreeBuilder {
         ElectricalNode node = new ElectricalNode();
 
         node.setName(get(row, NAME));
-        node.setAlias(get(row, ALIAS));
+        node.setAliasOrNumberOfPoints(get(row, ALIAS));
 
-        node.setCableType(get(row, CABLE_TYPE));
-        node.setQuantity(getInteger(row, QUANTITY));
-        node.setSection(getDouble(row, SECTION));
-        node.setResist(getDouble(row, RESIST));
+        node.setKabeliMarka(get(row, CABLE_TYPE));
+        node.setKabeliKolJilV(getInteger(row, QUANTITY));
+        node.setKabeliSecenie(getDouble(row, SECTION));
+        node.setKabeliSoprotivlenie(getInteger(row, RESIST));
+        node.setKabeliDlina(getInteger(row, LENGTH));
 
-        node.setProtectionType(get(row, PROTECTION));
-        node.setCalculation(get(row, CALCULATION));
-        node.setCurrent(getDouble(row, CURRENT));
-        node.setOperationCurrent(get(row, OPERATION_CURRENT));
-        node.setImpedance(get(row, IMPEDANCE));
-        node.setLength(getDouble(row, LENGTH));
+        node.setAvtomatMarka(get(row, PROTECTION));
+        node.setAvtomatTipulDeclansatorului(get(row, CALCULATION));
+        node.setAvtomatNominaliniiTok(getDouble(row, CURRENT));
+        node.setAvtomatTokSrabativaniaOrABCD(get(row, OPERATION_CURRENT));
+        node.setAvtomatSoprativleniaFazaNolOrIkz(getDouble(row, IMPEDANCE));
+
 
         return node;
     }
@@ -282,9 +283,9 @@ public class ElectricalTreeBuilder {
 
         System.out.println(
                 indent + node.getName()
-                        + " | Количество: " + node.getQuantity()
-                        + " | Сечение: " + node.getSection()
-                        + " | Длина: " + node.getLength()
+                        + " | Количество: " + node.getKabeliKolJilV()
+                        + " | Сечение: " + node.getKabeliSecenie()
+                        + " | Длина: " + node.getKabeliDlina()
         );
 
 //        for (ElectricalNode child : node.getChildren()) {
