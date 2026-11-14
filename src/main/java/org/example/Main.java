@@ -48,10 +48,33 @@ public class Main {
             );
         ElectricalNode panel = ElectricalTreeBuilder.findPanel(
                 root,
-                "Gradirnea"
+                "Panou distrib. transporter"
         );
 
         ElectricalTreeBuilder.printPanel(panel, 0);
+
+        ElectricalNode panel1 = ElectricalTreeBuilder.findPanel(
+                root,
+                "ГРЩ Cazangeria de gaz"
+        );
+
+        ElectricalTreeBuilder.printPanel(panel1, 0);
+
+        ElectricalNode panel2 = ElectricalTreeBuilder.findPanel(
+                root,
+                "Gradirnea"
+        );
+
+        ElectricalTreeBuilder.printPanel(panel2, 0);
+
+        ElectricalNode panel3 = ElectricalTreeBuilder.findPanel(
+                root,
+                "ГРЩ (moara)"
+        );
+
+        ElectricalTreeBuilder.printPanel(panel3, 0);
+
+
         //    printTree(root,1);
        // printHierarchy(contours);
     }

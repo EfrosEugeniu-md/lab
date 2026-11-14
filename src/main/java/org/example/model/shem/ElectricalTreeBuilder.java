@@ -33,20 +33,88 @@ public class ElectricalTreeBuilder {
 
         nodes.put("ROOT", root);
 
-        // 3. Определяем имена родительских элементов
-        Set<String> parentNames = new HashSet<>();
+        Set<String> parentNames = getParentNames(rows);
+
+        extracted(rows, parentNames, nodes, rowNodes);
+
+        // 5. Второй проход: устанавливаем связи
+        ElectricalNode currentParent = root;
+        ElectricalNode previousElement = null;
+        ElectricalNode previousPaneli = null;
 
         for (List<String> row : rows) {
 
-            String parent = get(row, PARENT);
+            String parentName = get(row, PARENT);
             String name = get(row, NAME);
 
-            if (parent != null) {
-                parentNames.add(parent);
-                parentNames.add(name);
+            if (isNameNull(name)) continue;
+
+            if (isDetail(row, name, previousElement)) continue;
+
+            // Получаем ранее созданный элемент
+            ElectricalNode node = rowNodes.get(row);
+
+            // Определяем родителя
+            if (parentName==null && node.getType() == NodeType.PANEL ) {
+                currentParent = root;
+            } else {
+
+                currentParent = nodes.get(parentName);
+
+                if (currentParent == null && node.getType() == NodeType.PANEL) {
+                    currentParent=root;
+                }
+
+                if (currentParent == null && node.getType() == NodeType.ELEMENT) {
+                    currentParent=previousPaneli;
+                }
             }
+
+            // Присоединяем к родителю
+            currentParent.addChild(node);
+
+            if (node.getType() == NodeType.PANEL){
+                previousElement = node;
+                previousPaneli = node;
+            }
+
+            if (node.getType() == NodeType.ELEMENT){
+                previousElement = node;
+            }
+
         }
 
+        return root;
+    }
+
+    private static boolean isNameNull(String name) {
+        if (name == null) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isDetail(List<String> row, String name, ElectricalNode previousElement) {
+        // Вложенные элементы (DETAIL)
+        if (name.startsWith("-")) {
+
+            if (previousElement == null) {
+                throw new IllegalStateException(
+                        "No parent element for detail: " + name
+                );
+            }
+
+            ElectricalNode detail = createNode(row);
+            detail.setType(NodeType.DETAIL);
+
+            previousElement.addChild(detail);
+
+            return true;
+        }
+        return false;
+    }
+
+    private static void extracted(List<List<String>> rows, Set<String> parentNames, Map<String, ElectricalNode> nodes, Map<List<String>, ElectricalNode> rowNodes) {
         // 4. Первый проход: создаём ВСЕ обычные элементы
         for (List<String> row : rows) {
 
@@ -67,66 +135,23 @@ public class ElectricalTreeBuilder {
             nodes.put(name, node);
             rowNodes.put(row, node);
         }
+    }
 
-        // 5. Второй проход: устанавливаем связи
-        ElectricalNode currentParent = root;
-        ElectricalNode previousElement = null;
+    private static Set<String> getParentNames(List<List<String>> rows) {
+        // 3. Определяем имена родительских элементов
+        Set<String> parentNames = new HashSet<>();
 
         for (List<String> row : rows) {
 
-            String parentName = get(row, PARENT);
+            String parent = get(row, PARENT);
             String name = get(row, NAME);
 
-            if (name == null) {
-                continue;
+            if (parent != null) {
+                parentNames.add(parent);
+                parentNames.add(name);
             }
-
-            // Определяем родителя
-            if (parentName != null) {
-
-                if (parentName.startsWith("ID ")) {
-                    currentParent = root;
-                } else {
-
-                    currentParent = nodes.get(parentName);
-
-                    if (currentParent == null) {
-                        throw new IllegalStateException(
-                                "Parent not found: " + parentName
-                        );
-                    }
-                }
-
-                previousElement = null;
-            }
-
-            // Вложенные элементы (DETAIL)
-            if (name.startsWith("-")) {
-
-                if (previousElement == null) {
-                    throw new IllegalStateException(
-                            "No parent element for detail: " + name
-                    );
-                }
-
-                ElectricalNode detail = createNode(row);
-                detail.setType(NodeType.DETAIL);
-
-                previousElement.addChild(detail);
-
-                continue;
-            }
-
-            // Получаем ранее созданный элемент
-            ElectricalNode node = rowNodes.get(row);
-
-            // Присоединяем к родителю
-            currentParent.addChild(node);
-
-            previousElement = node;
         }
-
-        return root;
+        return parentNames;
     }
 
 
@@ -260,8 +285,8 @@ public class ElectricalTreeBuilder {
                         + " | Длина: " + node.getLength()
         );
 
-        for (ElectricalNode child : node.getChildren()) {
-            printNode(child, level + 1);
-        }
+//        for (ElectricalNode child : node.getChildren()) {
+//            printNode(child, level + 1);
+//        }
     }
 }
