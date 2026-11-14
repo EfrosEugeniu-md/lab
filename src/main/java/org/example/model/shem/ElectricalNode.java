@@ -14,13 +14,14 @@ public class ElectricalNode {
     private String cableType;
     private Integer quantity;
     private Double section;
-    private Double length;
+    private Double resist;
 
     private String protectionType;
     private String calculation;
     private Double current;
     private String operationCurrent;
     private String impedance;
+    private Double length;
 
     private List<ElectricalNode> children = new ArrayList<>();
 
@@ -70,12 +71,12 @@ public class ElectricalNode {
         this.section = section;
     }
 
-    public Double getLength() {
-        return length;
+    public Double getResist() {
+        return resist;
     }
 
-    public void setLength(Double length) {
-        this.length = length;
+    public void setResist(Double resist) {
+        this.resist = resist;
     }
 
     public String getProtectionType() {
@@ -116,6 +117,14 @@ public class ElectricalNode {
 
     public void setImpedance(String impedance) {
         this.impedance = impedance;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
     }
 
     public List<ElectricalNode> getChildren() {

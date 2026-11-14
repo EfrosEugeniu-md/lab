@@ -10,12 +10,13 @@ public class ElectricalTreeBuilder {
     private static final int CABLE_TYPE = 3;
     private static final int QUANTITY = 4;
     private static final int SECTION = 5;
-    private static final int LENGTH = 6;
+    private static final int RESIST = 6;
     private static final int PROTECTION = 7;
     private static final int CALCULATION = 8;
     private static final int CURRENT = 9;
     private static final int OPERATION_CURRENT = 10;
     private static final int IMPEDANCE = 11;
+    private static final int LENGTH = 12;
 
 
     public static ElectricalNode build(List<List<String>> rows) {
@@ -166,13 +167,14 @@ public class ElectricalTreeBuilder {
         node.setCableType(get(row, CABLE_TYPE));
         node.setQuantity(getInteger(row, QUANTITY));
         node.setSection(getDouble(row, SECTION));
-        node.setLength(getDouble(row, LENGTH));
+        node.setResist(getDouble(row, RESIST));
 
         node.setProtectionType(get(row, PROTECTION));
         node.setCalculation(get(row, CALCULATION));
         node.setCurrent(getDouble(row, CURRENT));
         node.setOperationCurrent(get(row, OPERATION_CURRENT));
         node.setImpedance(get(row, IMPEDANCE));
+        node.setLength(getDouble(row, LENGTH));
 
         return node;
     }
